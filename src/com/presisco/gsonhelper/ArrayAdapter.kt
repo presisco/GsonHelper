@@ -6,24 +6,28 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 
-class ArrayAdapter : TypeAdapter<Array<Any>>{
-    private var mapAdapter : MapAdapter
+class ArrayAdapter : TypeAdapter<Array<Any?>> {
+    private var mapAdapter: MapAdapter
 
-    constructor(){
+    constructor() {
         mapAdapter = MapAdapter(this@ArrayAdapter)
     }
 
-    constructor(parent : MapAdapter){
+    constructor(parent: MapAdapter) {
         mapAdapter = parent
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun write(writer: JsonWriter, src: Array<Any>){
+    override fun write(writer: JsonWriter, src: Array<Any?>) {
         writer.beginArray()
-        for(item in src){
-            when(item){
-                is Map<*,*> -> mapAdapter.write(writer,item as HashMap<Any,Any>)
-                is Array<*> -> write(writer,item as Array<Any>)
+        for (item in src) {
+            if (item == null) {
+                writer.nullValue()
+                continue
+            }
+            when (item) {
+                is Map<*, *> -> mapAdapter.write(writer, item as HashMap<String, Any?>)
+                is Array<*> -> write(writer, item as Array<Any?>)
                 is String -> writer.value(item)
                 is Int -> writer.value(item)
                 is Float -> writer.value(item)
@@ -35,15 +39,17 @@ class ArrayAdapter : TypeAdapter<Array<Any>>{
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun read(reader: JsonReader) : Array<Any>{
-        val dst : ArrayList<Any> = arrayListOf()
+    override fun read(reader: JsonReader): Array<Any?> {
+        val dst: ArrayList<Any?> = arrayListOf()
         reader.beginArray()
-        while(reader.hasNext()){
-            when(reader.peek()){
+        while (reader.hasNext()) {
+            when (reader.peek()) {
                 JsonToken.STRING -> dst.add(reader.nextString())
                 JsonToken.BOOLEAN -> dst.add(reader.nextBoolean())
                 JsonToken.NUMBER -> dst.add(reader.nextDouble())
-                JsonToken.NULL -> dst.add(reader.nextNull())
+                JsonToken.NULL -> {
+                    dst.add(null);reader.nextNull()
+                }
                 JsonToken.BEGIN_OBJECT -> dst.add(mapAdapter.read(reader))
                 JsonToken.BEGIN_ARRAY -> dst.add(read(reader))
                 else -> throw JsonSyntaxException("illegal token")
