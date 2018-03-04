@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GsonHelper.iml" filepath="$PROJECT_DIR$/GsonHelper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Sample/Sample.iml" filepath="$PROJECT_DIR$/Sample/Sample.iml" />
     </modules>
   </component>
 </project>
