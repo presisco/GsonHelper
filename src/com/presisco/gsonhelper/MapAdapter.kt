@@ -1,5 +1,6 @@
 package com.presisco.gsonhelper
 
+import com.google.gson.JsonSyntaxException
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
@@ -39,7 +40,7 @@ class MapAdapter : TypeAdapter<Map<Any,Any>> {
 
     @Suppress("UNCHECKED_CAST")
     override fun read(reader: JsonReader): Map<Any, Any> {
-        val dst : MutableMap<Any,Any> = mutableMapOf()
+        val dst: HashMap<Any, Any> = hashMapOf()
         reader.beginObject()
         while(reader.hasNext()){
             val key=reader.nextName()
@@ -48,13 +49,9 @@ class MapAdapter : TypeAdapter<Map<Any,Any>> {
                 JsonToken.NUMBER -> dst[key] = reader.nextDouble()
                 JsonToken.NULL -> dst[key] = null as Any
                 JsonToken.BOOLEAN -> dst[key] = reader.nextBoolean()
-                else -> {
-                    try {
-                        dst[key] = read(reader)
-                    }catch (e : Exception){
-                        dst[key] = arrayAdapter.read(reader)
-                    }
-                }
+                JsonToken.BEGIN_OBJECT -> dst[key] = read(reader)
+                JsonToken.BEGIN_ARRAY -> dst[key] = arrayAdapter.read(reader)
+                else -> throw JsonSyntaxException("illegal token")
             }
         }
         reader.endObject()

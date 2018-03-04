@@ -1,5 +1,6 @@
 package com.presisco.gsonhelper
 
+import com.google.gson.JsonSyntaxException
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
@@ -43,13 +44,9 @@ class ArrayAdapter : TypeAdapter<Array<Any>>{
                 JsonToken.BOOLEAN -> dst.add(reader.nextBoolean())
                 JsonToken.NUMBER -> dst.add(reader.nextDouble())
                 JsonToken.NULL -> dst.add(reader.nextNull())
-                else -> {
-                    try {
-                        dst.add(mapAdapter.read(reader))
-                    }catch (e : Exception){
-                        dst.add(read(reader))
-                    }
-                }
+                JsonToken.BEGIN_OBJECT -> dst.add(mapAdapter.read(reader))
+                JsonToken.BEGIN_ARRAY -> dst.add(read(reader))
+                else -> throw JsonSyntaxException("illegal token")
             }
         }
         reader.endArray()
