@@ -25,7 +25,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/com/presisco/gsonhelper" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="JDK8" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.2" level="project" />
