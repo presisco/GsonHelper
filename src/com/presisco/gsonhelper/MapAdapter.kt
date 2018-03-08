@@ -5,6 +5,7 @@ import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
+import javax.activation.UnsupportedDataTypeException
 
 class MapAdapter : TypeAdapter<Map<Any,Any>> {
     private var arrayAdapter: ArrayAdapter
@@ -41,13 +42,17 @@ class MapAdapter : TypeAdapter<Map<Any,Any>> {
     @Suppress("UNCHECKED_CAST")
     override fun read(reader: JsonReader): Map<Any, Any> {
         val dst: HashMap<Any, Any> = hashMapOf()
+        var hasNull = false
         reader.beginObject()
+        val sb = StringBuilder("unsupported null for key: ")
         while(reader.hasNext()){
             val key=reader.nextName()
             when (reader.peek()) {
                 JsonToken.STRING -> dst[key] = reader.nextString()
                 JsonToken.NUMBER -> dst[key] = reader.nextDouble()
-                JsonToken.NULL -> dst[key] = null as Any
+                JsonToken.NULL -> {
+                    sb.append(key).append(", ");hasNull = true;reader.skipValue()
+                }
                 JsonToken.BOOLEAN -> dst[key] = reader.nextBoolean()
                 JsonToken.BEGIN_OBJECT -> dst[key] = read(reader)
                 JsonToken.BEGIN_ARRAY -> dst[key] = arrayAdapter.read(reader)
@@ -55,6 +60,8 @@ class MapAdapter : TypeAdapter<Map<Any,Any>> {
             }
         }
         reader.endObject()
+        if (hasNull)
+            throw UnsupportedDataTypeException(sb.toString())
         return dst
     }
 }
