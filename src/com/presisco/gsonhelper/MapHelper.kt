@@ -1,12 +1,12 @@
 package com.presisco.gsonhelper
 
-class MapHelper : BaseHelper<Map<String, Any>>(MapToken().type, MapAdapter()){
+class MapHelper : BaseHelper<HashMap<String, Any>>(MapToken().type, MapAdapter()){
 
-    override fun toJson(src : Map<String,Any>) : String {
+    override fun toJson(src : HashMap<String,Any>) : String {
         return gson.toJson(src, type)
     }
 
-    override fun fromJson(json : String) : Map<String,Any>{
+    override fun fromJson(json : String) : HashMap<String,Any>{
         return gson.fromJson(json,type)
     }
 

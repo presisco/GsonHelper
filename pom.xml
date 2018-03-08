@@ -7,11 +7,11 @@
 
     <groupId>com.presisco</groupId>
     <artifactId>GsonHelper</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <properties>
-        <kotlin.version>1.2.21</kotlin.version>
+        <kotlin.version>1.2.30</kotlin.version>
     </properties>
 
     <dependencies>

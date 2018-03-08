@@ -7,7 +7,7 @@ import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import javax.activation.UnsupportedDataTypeException
 
-class MapAdapter : TypeAdapter<Map<Any,Any>> {
+class MapAdapter : TypeAdapter<HashMap<Any,Any>> {
     private var arrayAdapter: ArrayAdapter
 
     constructor(){
@@ -19,7 +19,7 @@ class MapAdapter : TypeAdapter<Map<Any,Any>> {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun write(writer: JsonWriter, src: Map<Any, Any>) {
+    override fun write(writer: JsonWriter, src: HashMap<Any, Any>) {
         writer.beginObject()
         for((key,value) in src){
             when(key){
@@ -33,26 +33,23 @@ class MapAdapter : TypeAdapter<Map<Any,Any>> {
                 is Double -> writer.value(value)
                 is Boolean -> writer.value(value)
                 is Array<*> -> arrayAdapter.write(writer,value as Array<Any>)
-                is Map<*,*> -> write(writer,value as Map<Any, Any>)
+                is Map<*,*> -> write(writer,value as HashMap<Any, Any>)
             }
         }
         writer.endObject()
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun read(reader: JsonReader): Map<Any, Any> {
+    override fun read(reader: JsonReader): HashMap<Any, Any> {
         val dst: HashMap<Any, Any> = hashMapOf()
-        var hasNull = false
         reader.beginObject()
-        val sb = StringBuilder("unsupported null for key: ")
+
         while(reader.hasNext()){
             val key=reader.nextName()
             when (reader.peek()) {
                 JsonToken.STRING -> dst[key] = reader.nextString()
                 JsonToken.NUMBER -> dst[key] = reader.nextDouble()
-                JsonToken.NULL -> {
-                    sb.append(key).append(", ");hasNull = true;reader.skipValue()
-                }
+                JsonToken.NULL -> reader.nextNull()
                 JsonToken.BOOLEAN -> dst[key] = reader.nextBoolean()
                 JsonToken.BEGIN_OBJECT -> dst[key] = read(reader)
                 JsonToken.BEGIN_ARRAY -> dst[key] = arrayAdapter.read(reader)
@@ -60,8 +57,7 @@ class MapAdapter : TypeAdapter<Map<Any,Any>> {
             }
         }
         reader.endObject()
-        if (hasNull)
-            throw UnsupportedDataTypeException(sb.toString())
+
         return dst
     }
 }

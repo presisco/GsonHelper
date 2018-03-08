@@ -22,7 +22,7 @@ class ArrayAdapter : TypeAdapter<Array<Any>>{
         writer.beginArray()
         for(item in src){
             when(item){
-                is Map<*,*> -> mapAdapter.write(writer,item as Map<Any,Any>)
+                is Map<*,*> -> mapAdapter.write(writer,item as HashMap<Any,Any>)
                 is Array<*> -> write(writer,item as Array<Any>)
                 is String -> writer.value(item)
                 is Int -> writer.value(item)
