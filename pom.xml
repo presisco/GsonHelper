@@ -7,7 +7,7 @@
 
     <groupId>com.presisco</groupId>
     <artifactId>GsonHelper</artifactId>
-    <version>1.0.7</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -37,8 +37,8 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>${project.basedir}/src/com/presisco/gsonhelper/</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/test/com/presisco/gsonhelper/</testSourceDirectory>
+        <sourceDirectory>src/main/kotlin/com/presisco/gsonhelper/</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin/com/presisco/gsonhelper/</testSourceDirectory>
 
         <plugins>
             <plugin>
