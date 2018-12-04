@@ -10,8 +10,8 @@ class FormattedTest {
         val helper = FormattedMapHelper(
                 mapOf(
                         "string" to setOf("name", "gender", "friends"),
-                        "int" to setOf("age"),
-                        "double" to setOf("weight"),
+                        "byte" to setOf("age"),
+                        "float" to setOf("weight"),
                         "long" to setOf("id"),
                         "boolean" to setOf("good")
                 )
@@ -19,9 +19,9 @@ class FormattedTest {
 
         val original = mapOf(
                 "name" to "james",
-                "age" to 18,
+                "age" to 18.toByte(),
                 "gender" to "male",
-                "weight" to 75.5,
+                "weight" to 75.5.toFloat(),
                 "id" to 12345678909876L,
                 "good" to true,
                 "friends" to listOf(

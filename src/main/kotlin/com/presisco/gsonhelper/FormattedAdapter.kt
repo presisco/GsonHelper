@@ -76,7 +76,10 @@ abstract class FormattedAdapter<T>(
                     "string" -> reader.nextString()
                     "long" -> reader.nextLong()
                     "int" -> reader.nextInt()
+                    "short" -> reader.nextInt().toShort()
+                    "byte" -> reader.nextInt().toByte()
                     "double" -> reader.nextDouble()
+                    "float" -> reader.nextDouble().toFloat()
                     "boolean" -> reader.nextBoolean()
                     else -> throw IllegalStateException("unsupported type: ${formatMap[typeKey]}")
                 }
@@ -127,6 +130,6 @@ abstract class FormattedAdapter<T>(
     }
 
     companion object {
-        val typeSet = setOf("string", "long", "int", "double", "boolean")
+        val typeSet = setOf("string", "long", "int", "short", "byte", "double", "float", "boolean")
     }
 }
