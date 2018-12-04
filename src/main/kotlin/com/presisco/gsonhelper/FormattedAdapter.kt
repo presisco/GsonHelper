@@ -64,18 +64,21 @@ abstract class FormattedAdapter<T>(
             JsonToken.BEGIN_ARRAY -> readList(reader, key)
             JsonToken.BEGIN_OBJECT -> readMap(reader, key)
             else -> {
-                val type = if (key.isEmpty()) {
-                    formatMap[parentKey]
+                val typeKey = if (key.isEmpty()) {
+                    parentKey
                 } else {
-                    formatMap[key]
+                    key
                 }
-                when (type) {
+                if (!formatMap.containsKey(typeKey)) {
+                    throw IllegalStateException("no definition for key: $typeKey")
+                }
+                when (formatMap[typeKey]) {
                     "string" -> reader.nextString()
                     "long" -> reader.nextLong()
                     "int" -> reader.nextInt()
                     "double" -> reader.nextDouble()
                     "boolean" -> reader.nextBoolean()
-                    else -> throw IllegalStateException("unsupported type: ${formatMap[key]}")
+                    else -> throw IllegalStateException("unsupported type: ${formatMap[typeKey]}")
                 }
             }
         }
