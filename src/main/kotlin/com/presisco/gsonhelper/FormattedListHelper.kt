@@ -1,19 +1,18 @@
 package com.presisco.gsonhelper
 
-import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
+import com.presisco.gsonhelper.typetoken.ListToken
 
 class FormattedListHelper(
         formatDef: Map<String, Set<String>>,
         prettyPrint: Boolean = false
 ) : SimpleHelper<List<*>>(
-        ListToken().type,
+        ListToken.type,
         ListAdapter(formatDef),
         prettyPrint
 ) {
     companion object {
-        class ListToken : TypeToken<List<*>>()
 
         class ListAdapter(formatDef: Map<String, Set<String>>) : FormattedAdapter<List<*>>(formatDef) {
 

@@ -5,16 +5,17 @@ import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.presisco.gsonhelper.typetoken.FuzzyToken
 
-open class FuzzyHelper(
+class FormattedFuzzyHelper(
+        formatDef: Map<String, Set<String>>,
         prettyPrint: Boolean = false
 ) : SimpleHelper<Any>(
         FuzzyToken.type,
-        FuzzyAdapter(),
+        FuzzyAdapter(formatDef),
         prettyPrint
 ) {
     companion object {
 
-        class FuzzyAdapter : UniversalAdapter<Any>() {
+        class FuzzyAdapter(formatDef: Map<String, Set<String>>) : FormattedAdapter<Any>(formatDef) {
 
             @Suppress("UNCHECKED_CAST")
             override fun write(writer: JsonWriter, fuzz: Any) = if (fuzz is List<*>) writeList(writer, fuzz) else writeMap(writer, fuzz as Map<*, *>)

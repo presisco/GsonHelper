@@ -99,11 +99,11 @@ abstract class FormattedAdapter<T>(
 
     @Suppress("UNCHECKED_CAST")
     fun writeList(writer: JsonWriter, src: List<*>) {
-        writer.beginObject()
+        writer.beginArray()
         src.forEach { value ->
             writeValue(writer, null, value)
         }
-        writer.endObject()
+        writer.endArray()
     }
 
     @Suppress("UNCHECKED_CAST")

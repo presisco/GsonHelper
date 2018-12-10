@@ -23,7 +23,7 @@ abstract class SimpleHelper<T>(
         gson = builder.create()
     }
 
-    open fun toJson(src: T) = gson.toJson(src)
+    open fun toJson(src: T) = gson.toJson(src, type)
     open fun fromJson(json: String): T = gson.fromJson(json, type)
 
 }

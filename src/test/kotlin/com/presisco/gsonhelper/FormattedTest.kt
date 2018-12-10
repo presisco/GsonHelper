@@ -31,8 +31,8 @@ class FormattedTest {
         )
 
         val json = helper.toJson(original)
-        println(json)
 
-        expect(original) { helper.fromJson(json) }
+        val converted = helper.fromJson(json)
+        expect(original) { converted }
     }
 }
